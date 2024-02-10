@@ -1,4 +1,4 @@
-
+#include <iostream>
  // Definition for singly-linked list.
   struct ListNode {
       int val;
@@ -12,45 +12,56 @@ class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
 
-        int num1 = 0;
-        int num2 = 0;
-        int mulFactor = 1;
+        ListNode* head = nullptr;
+        ListNode* curr = head;
         ListNode* currL1 = l1;
         ListNode* currL2 = l2;
+        int currDigit = 0;
+        int carryDigit = 0;
+        int sum = 0;
 
-        while(currL1 != nullptr){
-            num1 += currL1->val * mulFactor;
-            mulFactor *= 10;
+        while(currL1 != nullptr && currL2 != nullptr){
+
+            sum = currL1->val + currL2->val + carryDigit;
+            currDigit = sum % 10;
+            carryDigit = (sum - currDigit) / 10;
+
+            if (head == nullptr){
+                head = new ListNode(currDigit);
+                curr = head;
+            }else{
+                curr->next = new ListNode(currDigit);
+                curr = curr->next;
+            }
+
             currL1 = currL1->next;
-        }
-
-        mulFactor = 1;
-        while(currL2 != nullptr){
-            num2 += currL2->val * mulFactor;
-            mulFactor *= 10;
             currL2 = currL2->next;
         }
 
-        int sum = num1 + num2;
+        while(currL1 != nullptr){
 
-        ListNode* head;
+            sum = currL1->val + carryDigit;
+            currDigit = sum % 10;
+            carryDigit = (sum - currDigit) / 10;
 
-        // handle head case
-        int numToAdd = sum % 10;
-        sum -= numToAdd;
-        sum = sum / 10;
-        head = new ListNode(numToAdd);
-
-        ListNode* curr = head;
-
-        //loop through the sum digits and add to list for rest of the nodes
-        while (sum > 0){
-            numToAdd = sum % 10;
-            sum -= numToAdd;
-            sum = sum / 10;
-
-            curr->next = new ListNode(numToAdd);
+            curr->next = new ListNode(currDigit);
             curr = curr->next;
+            currL1 = currL1->next;
+        }
+
+        while(currL2 != nullptr){
+
+            sum = currL2->val + carryDigit;
+            currDigit = sum % 10;
+            carryDigit = (sum - currDigit) / 10;
+
+            curr->next = new ListNode(currDigit);
+            curr = curr->next;
+            currL2 = currL2->next;
+        }
+
+        if (carryDigit != 0){
+            curr->next = new ListNode(carryDigit);
         }
         
         return head;
