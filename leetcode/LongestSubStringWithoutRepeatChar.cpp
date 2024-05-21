@@ -24,3 +24,34 @@ public:
         return largestSize;
     }
 };
+
+// Optimized sliding window solution using hash-set
+
+#include <unordered_set>
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int left = 0, right = 0;
+        std::unordered_set<char> charSet;
+        int maxSize = 0;
+        int i = 0;
+        while(i < s.length()){
+            char currChar = s[i];
+            if (charSet.find(currChar) == charSet.end()){
+                charSet.insert(currChar);
+                right++;
+            }else{
+                while(s[left] != currChar){
+                    charSet.erase(s[left]);
+                    left++;
+                }
+                left++;
+                right++;
+            }
+            i++;
+            maxSize = maxSize > right-left ? maxSize : right-left;
+        }
+        return maxSize;
+    }
+};
