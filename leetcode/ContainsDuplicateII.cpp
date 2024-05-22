@@ -1,8 +1,9 @@
 #include <unordered_set>
+#include <vector>
 
 class Solution {
 public:
-    bool containsNearbyDuplicate(vector<int>& nums, int k) {
+    bool containsNearbyDuplicate(std::vector<int>& nums, int k) {
 
         std::unordered_set<int> s;
         int i = 0;
